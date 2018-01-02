@@ -54,7 +54,24 @@ class FreeboxCtrl:
     
     def set_token(self, token):
         self.appToken = token
+    def wifi_get_stations(self):
+        data = self.__authenticated_request('/api/v3/wifi/ap/0/stations/')
+        return data['result']
 
+    def wifi_get_station_filter(self):
+        data = self.__authenticated_request('/api/v3/wifi/mac_filter')
+        return data['result']
+    
+    def wifi_setfilter_blacklist(self,ID):
+        body = json.dumps({'comment':"nocomment",'type':'blacklist'})
+        data = self.__authenticated_request("/api/v3/wifi/mac_filter/" + str(ID),body,'PUT')
+        return data['result']
+
+    def wifi_setfilter_whitelist(self,ID):
+        body = json.dumps({'comment':"nocomment",'type':'whitelist'})
+        data = self.__authenticated_request("/api/v3/wifi/mac_filter/" + str(ID),body,'PUT')
+        return data['result']
+    
     def is_freebox_player_on(self):
         data = self.__authenticated_request('/api/v3/airmedia/receivers')
         for elt in data['result']:
